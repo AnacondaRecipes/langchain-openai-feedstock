@@ -1,27 +1,28 @@
-{% set version = "0.2.0" %}
+{% set name = "langchain-openai" %}
+{% set version = "0.3.16" %}
 
 package:
   name: langchain-openai
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/l/langchain-openai/langchain_openai-{{ version }}.tar.gz
-  sha256: 441ec8fd254992e5fa81d375e60849993a81db5e9e42a79344ebff7a40a0b45f
+  url: https://pypi.io/packages/source/{{ name[0] }}/langchain-openai/langchain_openai-{{ version }}.tar.gz
+  sha256: 4e423e39d072f1432adc9430f2905fe635cc019f01ad1bdffa5ed8d0dda32149
 
 build:
   number: 0
-  noarch: python
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  skip: True  # [py<39]
+  script: {{ PYTHON }} -m pip install . --no-deps -vv --no-build-isolation
 
 requirements:
   host:
-    - python >=3.8
-    - poetry-core >=1.0.0
+    - python
     - pip
+    - pdm-backend
   run:
-    - python >=3.8
-    - langchain-core <0.4,>=0.3
-    - openai >=1.40.0,<2.0.0
+    - python
+    - langchain-core >=0.3.58,<1
+    - openai >=1.68.2,<2.0.0
     - tiktoken >=0.7,<1
 
 test:

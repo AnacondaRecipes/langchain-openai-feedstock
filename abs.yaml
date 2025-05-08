@@ -1,0 +1,5 @@
+upload_channels:
+  - sfe1ed40
+
+channels:
+  - https://staging.continuum.io/prefect/fs/tiktoken-feedstock/pr5/727f61a
