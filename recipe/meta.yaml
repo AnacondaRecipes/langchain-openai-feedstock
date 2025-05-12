@@ -26,10 +26,32 @@ requirements:
     - tiktoken >=0.7,<1
 
 test:
+  source_files:
+    - tests
   requires:
+    # Commented dependencies are ones that are specified by upstream but missing on our channels
     - pip
+    - pytest >=7.3.0,<8
+    - freezegun >=1.2.2,<2
+    - pytest-mock >=3.10.0,<4
+    # - syrupy >=4.0.2,<5
+    # - pytest-watcher >=0.3.4,<1
+    - pytest-asyncio >=0.21.1,<1
+    - pytest-cov >=4.1.0,<5
+    # - pytest-retry >=1.7.0,<1.8.0
+    - pytest-socket >=0.6.0,<1
+    - pytest-xdist >=3.6.1,<4
+    - numpy >=1.26.4  # [py<313]
+    - numpy >=2.1.0  # [py>=313]
+    # - langchain-tests
   commands:
     - pip check
+    {% set pytest_flags = "" %}
+    # Missing: langchain-tests
+    {% set pytest_flags = pytest_flags + " --ignore=tests/unit_tests/chat_models" %}
+    {% set pytest_flags = pytest_flags + " --ignore=tests/unit_tests/embeddings/test_base_standard.py" %}
+    {% set pytest_flags = pytest_flags + " --ignore=tests/unit_tests/embeddings/test_azure_standard.py" %}
+    - pytest -vv tests/unit_tests {{ pytest_flags }}
   imports:
     - langchain_openai
 
