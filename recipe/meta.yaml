@@ -57,7 +57,7 @@ test:
 
 about:
   home: https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai
-  license: Apache-2.0
+  license: MIT
   license_file: LICENSE
   license_family: Apache
   dev_url: https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai
