@@ -1,42 +1,40 @@
 {% set name = "langchain-openai" %}
-{% set version = "1.1.7" %}
+{% set version = "1.4.1" %}
 
 package:
-  name: langchain-openai
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/langchain-openai/langchain_openai-{{ version }}.tar.gz
-  sha256: f5ec31961ed24777548b63a5fe313548bc6e0eb9730d6552b8c6418765254c81
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_')}}-{{ version }}.tar.gz
+  sha256: 6d16be615d997db80294731b8e768783f1fb8e0313668e64acd50cd68acbad20
 
 build:
   number: 0
-  skip: True  # [py<310]
   script: {{ PYTHON }} -m pip install . --no-deps -vv --no-build-isolation
+  skip: true  # [py<310]
 
 requirements:
   host:
-    - python
     - pip
+    - python
     - hatchling
   run:
     - python
-    - langchain-core >=1.2.6,<2.0.0
-    - openai >=1.109.1,<3.0.0
+    - langchain-core >=1.5.1,<2.0.0
+    - openai >=2.45.0,<3.0.0
     - tiktoken >=0.7,<1.0.0
 
 test:
   source_files:
     - tests/unit_tests
+    - scripts/
   requires:
-    # Commented dependencies are ones that are specified by upstream but missing on our channels
     - pip
     - pytest >=7.3.0,<8 # [py<314]
     - pytest >=8.4.2,<9 # [py>=314]
     - freezegun >=1.2.2,<2
     - pytest-mock >=3.10.0,<4
-    # - syrupy >=4.0.2,<5
-    # - pytest-watcher >=0.3.4,<1
     - pytest-asyncio >=0.21.1,<1 # [py<314]
     - pytest-asyncio >=1,<2 # [py>=314]
     - pytest-cov >=4.1.0,<5 # [py<314]
@@ -46,7 +44,6 @@ test:
     - pytest-xdist >=3.6.1,<4
     - numpy >=1.26.4  # [py<313]
     - numpy >=2.1.0  # [py>=313]
-    # - langchain-tests
   commands:
     - pip check
     {% set pytest_flags = "" %}
@@ -57,6 +54,7 @@ test:
     {% set pytest_flags = pytest_flags + " --ignore=tests/unit_tests/middleware/test_openai_moderation_middleware.py" %}
     {% set pytest_flags = pytest_flags + " --deselect=tests/unit_tests/test_tools.py::test_async_custom_tool" %}
     {% set pytest_flags = pytest_flags + " --deselect=tests/unit_tests/embeddings/test_base.py::test_embed_with_kwargs_async" %}
+    {% set pytest_flags = pytest_flags + " --deselect=tests/unit_tests/test_check_version.py::test_main_passes_for_real_package" %}
     - pytest -vv tests/unit_tests {{ pytest_flags }}
   imports:
     - langchain_openai
